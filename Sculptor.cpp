@@ -99,14 +99,14 @@ void Sculptor::cutBox(int x0, int x1, int y0, int y1, int z0, int z1)
        }
     }
 }
-void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
+void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius)void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
 //Recebe as coordenadas e o raio da esfera
   if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0 && nx>radius>0)
   {
       for( int i = -radius; i<=radius; i++){ //pecorre o diametro
           for(int j = -radius; j<=radius; j++){
               for(int k = -radius; k<=radius; k++){
-                  if ((i*i+j*j+k*k) < radius*radius)
+                  if ((i*i+j*j+k*k) == radius*radius)
                   { //condição da esfera centrada na origem
                       putVoxel(i+xcenter,j+ycenter,k+zcenter); //adiciona um voxel
                   }
@@ -114,7 +114,7 @@ void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
           }
       }
   }
-}
+}  
 void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
   //Define uma elipsoide
    //recebe as coordenadas das dimensões e coordenadas do centro
