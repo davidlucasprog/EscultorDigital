@@ -115,6 +115,25 @@ void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius)void 
       }
   }
 }  
+
+void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius)
+{
+//Recebe as coordenadas e o raio da esfera
+  if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0 && nx>radius>0 && nx+radius<nx && ny+radius<ny && nz+radius<nz)
+  {
+      for( int i = -radius; i<=radius; i++){ //percorre o diametro
+          for(int j = -radius; j<=radius; j++){
+              for(int k = -radius; k<=radius; k++){
+                  if ((i*i+j*j+k*k) == radius*radius)
+                  { //condição da esfera centrada na origem
+                      cutVoxel(i+xcenter,j+ycenter,k+zcenter); //exclui um voxel
+                  }
+              }
+          }
+      }
+  }
+}
+
 void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
   //Define uma elipsoide
    //recebe as coordenadas das dimensões e coordenadas do centro
@@ -135,6 +154,42 @@ void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
         } 
     }
 }
+
+void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
+{
+    //Define uma elipsoide
+   //recebe as coordenadas das dimensões e coordenadas do centro
+    if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0)
+    {
+       for ( int i = 0; i < nx; i++){
+           for ( int j = 0; j < ny; j++){
+               for (int k = 0; k < nz; k++){
+            //calculo da condição de existencia da elipsoide
+                   if(((i-xcenter)*(i-xcenter)/(rx * rx))
+                       +((j-ycenter)*(j-ycenter)/(ry * ry))+
+                       ((k-zcenter)*(k-zcenter)/(rz * rz))>=1)
+                   {
+                       cutVoxel(i,j,k);
+                   }
+                }
+            }
+        }
+    }
+}
+
+void Sculptor::writeOFF(const char* filename)
+{
+  std::ofstream fout;
+
+  fout.open("alo.off");
+  if(!fout.is_open()){
+    std::exit(0);
+  }
+  // Lancar dados no fluxo
+  fout << "david\n\nfoi para italia";
+  fout.close();
+}
+
 
 
 
