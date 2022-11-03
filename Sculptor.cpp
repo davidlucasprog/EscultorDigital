@@ -1,25 +1,44 @@
 #include "Sculptor.h"
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <iomanip>
+#include <cmath>
+#include <vector>
 
-Sculptor::Sculptor(int nx, int ny, int nz)
+Sculptor::Sculptor(int _nx, int _ny, int _nz)
 {
     int i, j, k;  //Variaveis para lassos
-    this -> nx = nx; //Variaveis de dimensoes recebendo os valores de inicializacao do construtor
-    this -> ny = ny;
-    this -> nz = nz;
+    nx = _nx; //Variaveis de dimensoes recebendo os valores de inicializacao do construtor
+    ny = _ny;
+    nz = _nz;
 
-    v = new voxel**[nx]; //Alocacao dos voxels do eixo x da matriz
+    v = new Voxel**[nx]; //Alocacao dos voxels do eixo x da matriz
 
     for (i=0; i < nx; i++)
     {
-        v[i] = new voxel*[ny]; //Alocacao dos voxels do eixo y da matriz
+        v[i] = new Voxel*[ny]; //Alocacao dos voxels do eixo y da matriz
     }
     for (i=0; i < nx; i++)
     {
         for (j=0; j<ny; j++)
         {
-            v[i][j] = new voxel[nz]; //Alocacao dos voxels do eixo z da matriz
+            v[i][j] = new Voxel[nz]; //Alocacao dos voxels do eixo z da matriz
         }
     }
+
+  /*v = new Voxel**[nx];
+  v[0] = new Voxel*[nx*ny];
+  v[0][0] = new Voxel [nx*ny*nz];
+
+ for(i=1;i<nx;i++)
+  {
+    v[i] = v[i-1] + ny;
+  }
+  for(j=1;j<ny;j++)
+  {
+    v[j] = v[j-1] + nz;
+  }*/
 }
 
 Sculptor::~Sculptor()
@@ -39,17 +58,21 @@ Sculptor::~Sculptor()
     }
     
     delete [] v; //Liberacao completa da matriz
+
+/*delete [] v[0][0];
+delete [] v[0];
+delete [] v;*/
 }
 
-void Sculptor::setColor(float r, float g, float b, float alpha)
+void Sculptor::setColor(float _r, float _g, float _b, float a)
 {
-    this -> r = r; this -> g = g; this -> b = b; a = alpha;
+    Sculptor::r = _r; Sculptor::g = _g; Sculptor::b = _b; Sculptor::a = a;
 }
 void Sculptor::putVoxel(int x, int y, int z)
 {
     if (nx>x && ny>y && nz>z)
     {
-         v[x][y][z].isOn = true;// insere um voxel
+        v[x][y][z].isOn = true;// insere um voxel
     // repassa cor e transparência do voxel
         v[x][y][z].r = r; 
         v[x][y][z].g = g; 
@@ -67,12 +90,12 @@ void Sculptor::cutVoxel(int x, int y, int z)
 }
 void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1){
    
-    if (x0> 0 && x1<nx && y0 > 0 && y1 <ny && z0> 0 && z1<nz)
+    if (x0>= 0 && x1<nx && y0 >= 0 && y1 <ny && z0>= 0 && z1<nz)
     {
        //Define uma sequencia de voxel
-        for(int i = x0; i<x1; i++){
-            for (int j = y0; j<y1; j++){
-                for (int k = z0; k<z1; k++){
+        for(int i = x0; i<=x1; i++){
+            for (int j = y0; j<=y1; j++){
+                for (int k = z0; k<=z1; k++){
                     v[i][j][k].isOn=true;
                     v[i][j][k].r = r;
                     v[i][j][k].g = g;
@@ -85,7 +108,7 @@ void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1){
 }
 void Sculptor::cutBox(int x0, int x1, int y0, int y1, int z0, int z1)
 {
-    if(x0>0 && x1<nx && y0>0 && y1<ny && z0>0 && z1<nz)
+    if(x0>=0 && x1<nx && y0>=0 && y1<ny && z0>=0 && z1<nz)
     {
        for(int i=x0; i<=x1; i++)
        {
@@ -106,7 +129,7 @@ void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
       for( int i = -radius; i<=radius; i++){ //pecorre o diametro
           for(int j = -radius; j<=radius; j++){
               for(int k = -radius; k<=radius; k++){
-                  if ((i*i+j*j+k*k) == radius*radius)
+                  if ((i*i+j*j+k*k) < radius*radius)
                   { //condição da esfera centrada na origem
                       putVoxel(i+xcenter,j+ycenter,k+zcenter); //adiciona um voxel
                   }
@@ -177,20 +200,90 @@ void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
     }
 }
 
-void Sculptor::writeOFF(const char* filename)
-{
-  std::ofstream fout;
+void Sculptor::writeOFF(const char *filename){
+    int qtd_Voxel = 0;
+    int ref;
+    int  i, j, k, a, b, c; //auxiliares
+    float fix = 0.5;
+    std::ofstream endArq;
+    endArq.open(filename);
+    if (endArq.is_open()){
+        endArq<<"OFF\n"; //Define off na primeira linha
 
-  fout.open("alo.off");
-  if(!fout.is_open()){
-    std::exit(0);
-  }
-  // Lancar dados no fluxo
-  fout << "david\n\nfoi para italia";
-  fout.close();
+        // Percorre todas as dimensoes verificando os voxel em exibiçao
+        for (i = 0; i < nx; i++){
+            for (j = 0; j <ny; j++){
+                for (k = 0; k <nz; k++){
+                    if(v[i][j][k].isOn == true){
+                    qtd_Voxel++; //Guarda a quantidade de voxel ativos
+                    }
+                }
+            }
+        }
+        endArq<<qtd_Voxel * 8<<" "<<qtd_Voxel * 6 << " " << "0" << "\n"; 
+        // exibe a quantidade total de vertices, faces e arestas
+
+        //Pecorre as posições a, b, c e exibe as coordenadas do voxel
+        //No primeiro voxel o fix será o valor de referencia
+        for (a = 0; a < nx; a++){
+            for (b = 0; b < ny; b++){
+                for (c = 0; c < nz; c++){
+                    if(v[a][b][c].isOn == true){
+                        endArq << a - fix << " " << b + fix << " " << c - fix << "\n" << std::flush;
+                        endArq << a - fix << " " << b - fix << " " << c - fix << "\n" << std::flush;
+                        endArq << a + fix << " " << b - fix << " " << c - fix << "\n" << std::flush;
+                        endArq << a + fix << " " << b + fix << " " << c - fix << "\n" << std::flush;
+                        endArq << a - fix << " " << b + fix << " " << c + fix << "\n" << std::flush;
+                        endArq << a - fix << " " << b - fix << " " << c + fix << "\n" << std::flush;
+                        endArq << a + fix << " " << b - fix << " " << c + fix << "\n" << std::flush;
+                        endArq << a + fix << " " << b + fix << " " << c + fix << "\n" << std::flush;
+                    }
+                }
+            }
+        }
+
+        qtd_Voxel = 0; //Reseta a quantidade de voxel
+
+        // percorre todas as dimensoes
+        // Verifica os voxel ativos e exibe as linhas com numeros de faces e as combinacoes que exibem a face
+        for (a= 0; a<nx; a++){
+            for (b = 0; b<ny; b++){
+                for (c= 0; c<nz; c++){
+                    if(v[a][b][c].isOn == true){
+                    ref = qtd_Voxel * 8;
+                    endArq << std::fixed;
+
+                    // Construir linha que monta as faces a partir do vertices:
+                    //Valores exemplos do site quando ref = 0:
+                    endArq << "4" << " " << 0+ref << " " << 3+ref << " " << 2+ref << " " << 1+ref << " ";
+                    //exibindo propriedades do voxel:
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2)<<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+
+                    endArq << "4" << " " << 4+ref << " " << 5+ref << " " << 6+ref << " " << 7+ref << " ";
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2)<<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+
+                    endArq << "4" << " " << 0+ref << " " << 1+ref << " " << 5+ref << " " << 4+ref << " ";
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2)<<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+
+                    endArq << "4" << " " << 0+ref << " " << 4+ref << " " << 7+ref << " " << 3+ref << " ";
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2)<<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+
+                    endArq << "4" << " " << 3+ref << " " << 7+ref << " " << 6+ref << " " << 2+ref << " ";
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2) <<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+                    endArq << "4" << " " << 1+ref << " " << 2+ref << " " << 6+ref << " " << 5+ref << " ";
+                    endArq << std::setprecision(2)<<v[a][b][c].r << " " << std::setprecision(2)<<v[a][b][c].g <<" " << std::setprecision(2)<<v[a][b][c].b << " " << std::setprecision(2) << v[a][b][c].a << "\n";
+
+                    qtd_Voxel++; //incrementa a qtd de voxels
+                    }
+                }
+            }
+        }
+    }
+    else{
+    std::cout << "Erro ao abrir arquivo de texto."; 
+    }
+    
+    endArq.close();
 }
-
-
-
 
 
