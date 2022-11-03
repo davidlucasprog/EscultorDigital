@@ -53,6 +53,41 @@ int main()
     desenho.cutBox(6, 13, 31, 31, 4, 20);
     desenho.cutBox(13, 13, 30, 30, 4, 20);
     
+     //contorno preto-lado esquerdo
+    desenho.setColor(0, 0, 0, 1);
+    desenho.putBox(8, 8, 0, 2, 4, 20);//contorno do braço
+    desenho.putBox(4, 4, 0, 2, 4, 20);
+    desenho.putBox(5, 7, 3, 3, 4, 20);
+    desenho.putBox(6, 6, 4, 4, 4, 20);
+    desenho.putBox(7, 7, 5, 5, 4, 20);
+    desenho.putBox(8, 8, 6, 6, 4, 20);
+    desenho.putBox(9, 9, 6, 11, 4, 20);
+    desenho.putBox(8, 8, 12, 12, 4, 20);
+    desenho.putBox(7, 7, 13, 14, 4, 20);
+    desenho.putBox(9, 9, 15, 15, 4, 20);
+    desenho.putBox(10, 10, 12, 12, 4, 20);
+    desenho.putBox(9, 9, 13, 13, 4, 20);
+    desenho.putBox(10, 10, 14, 14, 4, 20);
+   
+
+    //contorno preto-lado direito
+    desenho.setColor(0, 0, 0, 1);
+    desenho.putBox(19, 19, 0, 2, 4, 20);
+    desenho.putBox(20, 20, 0, 0, 4, 20);
+    desenho.putBox(18, 18, 2, 3, 4, 20);
+    desenho.putBox(17, 17, 4, 4, 4, 20);
+    desenho.putBox(14, 16, 5, 5, 4, 20);
+    desenho.putBox(11, 13, 4, 4, 4, 20);
+    desenho.putBox(10, 10, 5, 5, 4, 20);
+    desenho.putBox(16, 16, 6, 6, 4, 20);
+    desenho.putBox(17, 18, 7, 7, 4, 20);
+    desenho.putBox(19, 19, 8, 8, 4, 20);
+    desenho.putBox(15, 23, 9, 9, 4, 20);
+    desenho.putBox(12, 14, 10, 10, 4, 20);
+    desenho.putBox(13, 13, 11, 11, 4, 20);
+    desenho.putBox(24, 24, 10, 11, 4, 20);
+    desenho.putBox(23, 23, 12, 12, 4, 20);
+    desenho.putBox(21, 23, 13, 13, 4, 20);
     
     desenho.writeOFF((const char*)"BartSimpson.off");
 
