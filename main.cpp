@@ -40,15 +40,15 @@ int main()
     desenho.cutBox(17, 23, 5, 6, 4, 20);
     //Olho direito
     desenho.setColor(1, 1, 1, 1);
-    desenho.putSphere(17, 17, 4, 3);
+    desenho.putSphere(17, 17, 20, 3);
     //Olho esquerdo
-    desenho.putSphere(23, 19, 4, 2);
+    desenho.putSphere(21, 19, 20, 2);
     //Biloca do olho direito
     desenho.setColor(0, 0, 0, 1);
-    desenho.putVoxel(15, 16, 1);
+    desenho.putVoxel(16, 17, 22);
     //Biloca do olho esquerdo
     desenho.setColor(0, 0, 0, 1);
-    desenho.putVoxel(23, 19, 1);
+    desenho.putVoxel(21, 19, 21);
     //Cabelo
     desenho.setColor(0, 0, 0, 1);
     desenho.putBox(6, 17, 30, 31, 4, 20);
@@ -69,9 +69,6 @@ int main()
     desenho.putBox(6, 6, 22, 24, 4, 20);
     desenho.putBox(7, 7, 19, 21, 4, 20);
     desenho.putBox(8, 8, 15, 18, 4, 20);
-    
-    //vinicius
-     //contorno preto-lado esquerdo
     desenho.setColor(0, 0, 0, 1);
     desenho.putBox(8, 8, 0, 2, 4, 20);//contorno do braço
     desenho.putBox(4, 4, 0, 2, 4, 20);
@@ -88,7 +85,7 @@ int main()
     desenho.putBox(10, 10, 14, 14, 4, 20);
    
 
-    //contorno preto-lado direito
+    //contorno lado esquerdo
     desenho.setColor(0, 0, 0, 1);
     desenho.putBox(19, 19, 0, 2, 4, 20);
     desenho.putBox(20, 20, 0, 0, 4, 20);
