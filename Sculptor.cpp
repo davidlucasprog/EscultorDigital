@@ -158,6 +158,7 @@ void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius)
 }
 
 void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
+float x,y,z;
   //Define uma elipsoide
    //recebe as coordenadas das dimensões e coordenadas do centro
     if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0)
@@ -166,9 +167,10 @@ void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
            for ( int j = 0; j < ny; j++){
                for (int k = 0; k < nz; k++){
             //calculo da condição de existencia da elipsoide
-                   if(((i-xcenter)*(i-xcenter)/(rx * rx))
-                       +((j-ycenter)*(j-ycenter)/(ry * ry))+
-                       ((k-zcenter)*(k-zcenter)/(rz * rz))>=1)
+                x = ((float)(i-xcenter)*(float)(i-xcenter))/(rx * rx);
+                y = ((float)(j-ycenter)*(float)(j-ycenter))/(ry * ry);
+                z = ((float)(k-zcenter)*(float)(k-zcenter))/(rz * rz);
+                   if((x+y+z)<1)
                    {
                        putVoxel(i,j,k); 
                    }
@@ -180,6 +182,7 @@ void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
 
 void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
 {
+    float x,y,z;
     //Define uma elipsoide
    //recebe as coordenadas das dimensões e coordenadas do centro
     if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0)
@@ -188,17 +191,19 @@ void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
            for ( int j = 0; j < ny; j++){
                for (int k = 0; k < nz; k++){
             //calculo da condição de existencia da elipsoide
-                   if(((i-xcenter)*(i-xcenter)/(rx * rx))
-                       +((j-ycenter)*(j-ycenter)/(ry * ry))+
-                       ((k-zcenter)*(k-zcenter)/(rz * rz))>=1)
+                x = ((float)(i-xcenter)*(float)(i-xcenter))/(rx * rx);
+                y = ((float)(j-ycenter)*(float)(j-ycenter))/(ry * ry);
+                z = ((float)(k-zcenter)*(float)(k-zcenter))/(rz * rz);
+                   if((x+y+z)<1)
                    {
-                       cutVoxel(i,j,k);
+                       cutVoxel(i,j,k); 
                    }
                 }
             }
         }
     }
 }
+
 
 void Sculptor::writeOFF(const char *filename){
     int qtd_Voxel = 0;
