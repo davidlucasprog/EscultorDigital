@@ -26,19 +26,6 @@ Sculptor::Sculptor(int _nx, int _ny, int _nz)
             v[i][j] = new Voxel[nz]; //Alocacao dos voxels do eixo z da matriz
         }
     }
-
-  /*v = new Voxel**[nx];
-  v[0] = new Voxel*[nx*ny];
-  v[0][0] = new Voxel [nx*ny*nz];
-
- for(i=1;i<nx;i++)
-  {
-    v[i] = v[i-1] + ny;
-  }
-  for(j=1;j<ny;j++)
-  {
-    v[j] = v[j-1] + nz;
-  }*/
 }
 
 Sculptor::~Sculptor()
@@ -58,10 +45,6 @@ Sculptor::~Sculptor()
     }
     
     delete [] v; //Liberacao completa da matriz
-
-/*delete [] v[0][0];
-delete [] v[0];
-delete [] v;*/
 }
 
 void Sculptor::setColor(float _r, float _g, float _b, float a)
@@ -88,7 +71,8 @@ void Sculptor::cutVoxel(int x, int y, int z)
         v[x][y][z].isOn = false;
     }
 }
-void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1){
+void Sculptor::putBox(int x0, int x1, int y0, int y1, int z0, int z1)
+{
    
     if (x0>= 0 && x1<nx && y0 >= 0 && y1 <ny && z0>= 0 && z1<nz)
     {
@@ -122,7 +106,8 @@ void Sculptor::cutBox(int x0, int x1, int y0, int y1, int z0, int z1)
        }
     }
 }
-void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
+void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius)
+{
 //Recebe as coordenadas e o raio da esfera
   if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0 && nx>radius>0)
   {
@@ -138,16 +123,15 @@ void Sculptor::putSphere(int xcenter, int ycenter, int zcenter, int radius){
       }
   }
 }  
-
 void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius)
 {
 //Recebe as coordenadas e o raio da esfera
-  if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0 && nx>radius>0 && nx+radius<nx && ny+radius<ny && nz+radius<nz)
+  if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0 && nx>radius>0)
   {
       for( int i = -radius; i<=radius; i++){ //percorre o diametro
           for(int j = -radius; j<=radius; j++){
               for(int k = -radius; k<=radius; k++){
-                  if ((i*i+j*j+k*k) == radius*radius)
+                  if ((i*i+j*j+k*k) < radius*radius)
                   { //condição da esfera centrada na origem
                       cutVoxel(i+xcenter,j+ycenter,k+zcenter); //exclui um voxel
                   }
@@ -156,9 +140,9 @@ void Sculptor::cutSphere(int xcenter, int ycenter, int zcenter, int radius)
       }
   }
 }
-
-void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz){
-float x,y,z;
+void Sculptor::putEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
+{
+    float x,y,z;
   //Define uma elipsoide
    //recebe as coordenadas das dimensões e coordenadas do centro
     if(nx>xcenter>0 && ny>ycenter>0 && nz>zcenter>0)
@@ -179,7 +163,6 @@ float x,y,z;
         } 
     }
 }
-
 void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int ry, int rz)
 {
     float x,y,z;
@@ -203,9 +186,8 @@ void Sculptor::cutEllipsoid(int xcenter, int ycenter, int zcenter, int rx, int r
         }
     }
 }
-
-
-void Sculptor::writeOFF(const char *filename){
+void Sculptor::writeOFF(const char *filename)
+{
     int qtd_Voxel = 0;
     int ref;
     int  i, j, k, a, b, c; //auxiliares
@@ -290,5 +272,4 @@ void Sculptor::writeOFF(const char *filename){
     
     endArq.close();
 }
-
 
