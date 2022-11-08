@@ -13,10 +13,10 @@ int main()
 
     exemplo.putVoxel(1, 2, 3);
     exemplo.cutVoxel(1, 2, 3);
-	exemplo.putBox(15,20,36,40,30,36);
+    exemplo.putBox(15,20,36,40,30,36);
     exemplo.cutBox(17,19,38,40,30,32);
   
-	exemplo.setColor(0.78, 0.63, 0.78, 1.0);
+    exemplo.setColor(0.78, 0.63, 0.78, 1.0);
     exemplo.putEllipsoid(5, 25,30 ,6 ,10 ,6);
     exemplo.cutEllipsoid(5, 30, 30, 6, 10, 6);
   
