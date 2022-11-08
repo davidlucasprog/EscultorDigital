@@ -16,7 +16,7 @@ int main()
     desenho.putEllipsoid(25, 25, 25, 10, 1000, 10);
     desenho.cutBox(1, 50, 0, 52, 1, 50);
     //peitoral
-    desenho.setColor(1.0, 0.64, 0, 1.0);
+    desenho.setColor(1.0, 0, 0, 1.0);
     desenho.putBox(10, 40, 50, 52, 9, 37);
     desenho.putBox(8, 42, 45, 49, 9, 37);
     desenho.putBox(6, 44, 34, 44, 9, 37);
